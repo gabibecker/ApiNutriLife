@@ -200,6 +200,27 @@ fun Application.configureRouting() {
             }
         }
 
+        //getrreceitasbyid
+        get("/receitas/{id}") {
+            try {
+                //val temp = call.receiveText()
+                //print(temp)
+                val idReceitas = call.request.queryParameters["id"] as List<Int>
+                if (idReceitas == null) {
+                    call.respond(HttpStatusCode.BadRequest, "ID inválido")
+                    return@get
+                }
+                val receitas = receitaRepository.getReceitasById(idReceitas)
+                if (receitas == null) {
+                    call.respond(HttpStatusCode.NotFound, "Receita não encontrada")
+                    return@get
+                }
+                call.respond(receitas)
+            } catch (e: Exception) {
+                call.respondText("Erro ao buscar receita: $e", status = HttpStatusCode.BadRequest)
+            }
+        }
+
         // saveReceitas
         post("/receitas") {
             try {
@@ -254,7 +275,7 @@ fun Application.configureRouting() {
                     call.respond(HttpStatusCode.BadRequest, "Usuário ou data inválidos")
                     return@get
                 }
-                val preferencias = dietaRepository.getUserPreferences(idUser, data)
+                val preferencias: List<Int> = dietaRepository.getUserPreferences(idUser, data)
                 call.respond(preferencias)
             } catch (e: Exception) {
                 call.respondText("Erro ao buscar preferências de dieta: $e", status = HttpStatusCode.BadRequest)
@@ -279,11 +300,31 @@ fun Application.configureRouting() {
         // addDiet
         post("/dietas") {
             try {
+//                val temp = call.receiveText()
+//                print(temp)
                 val request = call.receive<List<Dieta>>()
                 dietaRepository.addDiet(request)
                 call.respondText("Dietas gravadas com sucesso", status = HttpStatusCode.Created)
             } catch (e: Exception) {
                 call.respondText("Erro ao gravar dietas: $e", status = HttpStatusCode.BadRequest)
+            }
+        }
+
+        //deleteUserDieta
+        delete("/dietas/{id}") {
+            try {
+                val idUser = call.parameters["id"]?.toIntOrNull()
+                if (idUser == null) {
+                    call.respond(HttpStatusCode.BadRequest, "ID inválido")
+                    return@delete
+                }
+                if (dietaRepository.deleteUserDieta(idUser)) {
+                    call.respondText("Usuário deletado com sucesso", status = HttpStatusCode.OK)
+                } else {
+                    call.respondText("Erro ao deletar usuário", status = HttpStatusCode.BadRequest)
+                }
+            } catch (e: Exception) {
+                call.respondText("Erro ao deletar usuário: $e", status = HttpStatusCode.BadRequest)
             }
         }
     }
@@ -312,14 +353,34 @@ fun Application.configureRouting() {
         // setUserPreference
         post("/gostos") {
             try {
-                val request = call.receive<List<Gosto>>()
+//                val teste = call.receiveText()
+//                print("$teste")
+                val request = call.receive<MutableList<Gosto>>()
                 gostoRepository.setUserPreference(request)
                 call.respondText("Gostos gravados com sucesso", status = HttpStatusCode.Created)
             } catch (e: Exception) {
                 call.respondText("Erro ao gravar gostos: $e", status = HttpStatusCode.BadRequest)
             }
         }
+
+        delete("/gostos/{id}") {
+            try {
+                val idUser = call.parameters["id"]?.toIntOrNull()
+                if (idUser == null) {
+                    call.respond(HttpStatusCode.BadRequest, "ID inválido")
+                    return@delete
+                }
+                if (gostoRepository.deleteUserGosto(idUser)) {
+                    call.respondText("Usuário deletado com sucesso", status = HttpStatusCode.OK)
+                } else {
+                    call.respondText("Erro ao deletar usuário", status = HttpStatusCode.BadRequest)
+                }
+            } catch (e: Exception) {
+                call.respondText("Erro ao deletar usuário: $e", status = HttpStatusCode.BadRequest)
+            }
+        }
     }
+
 
     // IngredienteDaReceitaDao
     routing {

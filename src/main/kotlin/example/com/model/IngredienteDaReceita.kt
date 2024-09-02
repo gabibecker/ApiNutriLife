@@ -1,8 +1,9 @@
 package example.com.model
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
-
+@Serializable
 data class IngredienteDaReceita(
     val id: Int,
     val idReceita: Int,

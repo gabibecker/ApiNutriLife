@@ -8,6 +8,8 @@ class GostosRepository(
 ) {
     suspend fun getUserPreferences(id: Int): List<Gosto> = dao.getUserPreferences(id)
 
-    suspend fun setUserPreference(lista: List<Gosto>) = dao.setUserPreference(lista)
+    suspend fun setUserPreference(lista: MutableList<Gosto>) = dao.setUserPreference(lista)
+
+    suspend fun deleteUserGosto(idUser: Int) = dao.deleteUserGosto(idUser)
 
 }

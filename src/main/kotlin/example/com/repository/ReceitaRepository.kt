@@ -11,6 +11,9 @@ class ReceitaRepository(
     suspend fun getAllReceitas(): List<ReceitaResponse> {
         return dao.findAll()
     }
+    suspend fun getReceitasById(lista: List<Int>): List<ReceitaResponse> {
+        return dao.getById(lista)
+    }
 
     suspend fun saveReceitas(receitas: List<Receita>) {
         dao.saveAll(receitas)

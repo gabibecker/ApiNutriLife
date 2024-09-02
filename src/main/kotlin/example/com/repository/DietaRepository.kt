@@ -7,6 +7,7 @@ import example.com.dto.IngredienteResponse
 import example.com.model.Dieta
 import example.com.model.Dietas
 import example.com.model.Ingrediente
+import example.com.model.Receita
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -19,4 +20,6 @@ class DietaRepository(
     suspend fun getUserDiet(userId: Int) = dao.getUserDiet(userId)
 
     suspend fun addDiet(dieta: List<Dieta>) = dao.addDiet(dieta)
+
+    suspend fun deleteUserDieta(idUser : Int) = dao.deleteUserDieta(idUser)
 }
