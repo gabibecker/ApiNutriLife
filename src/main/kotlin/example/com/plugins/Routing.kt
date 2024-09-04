@@ -64,7 +64,7 @@ fun Application.configureRouting() {
                     call.respond(HttpStatusCode.BadRequest, "Email inválido")
                     return@get
                 }
-                val user = userRepository.getUserByEmail(email)
+                var user = userRepository.getUserByEmail(email)
                 if (user == null) {
                     call.respond(HttpStatusCode.NotFound, "Usuário não encontrado")
                     return@get
@@ -170,7 +170,7 @@ fun Application.configureRouting() {
             try {
                 val idUser = call.parameters["id"]?.toIntOrNull()
                 if (idUser == null) {
-                    call.respond(HttpStatusCode.BadRequest, "ID inválido")
+                    call.respondText("ID USERS inválido", status = HttpStatusCode.BadRequest)
                     return@delete
                 }
                 if (userRepository.deleteUser(idUser)) {
@@ -315,7 +315,7 @@ fun Application.configureRouting() {
             try {
                 val idUser = call.parameters["id"]?.toIntOrNull()
                 if (idUser == null) {
-                    call.respond(HttpStatusCode.BadRequest, "ID inválido")
+                    call.respondText("ID inválido", status = HttpStatusCode.BadRequest)
                     return@delete
                 }
                 if (dietaRepository.deleteUserDieta(idUser)) {
@@ -365,9 +365,11 @@ fun Application.configureRouting() {
 
         delete("/gostos/{id}") {
             try {
+                //val teste = call.receiveText()
+                //print(teste)
                 val idUser = call.parameters["id"]?.toIntOrNull()
                 if (idUser == null) {
-                    call.respond(HttpStatusCode.BadRequest, "ID inválido")
+                    call.respondText("ID GSOTOS inválido",status =HttpStatusCode.BadRequest)
                     return@delete
                 }
                 if (gostoRepository.deleteUserGosto(idUser)) {
