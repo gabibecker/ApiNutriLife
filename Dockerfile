@@ -18,9 +18,7 @@ FROM openjdk:11-jre-slim as run
 
 # Definir diretório de trabalho
 WORKDIR /app
-
 # Copiar o JAR gerado pela fase de build
 COPY --from=build /app/build/libs/com.liralabs.paris-all.jar /app/com.liralabs.paris-all.jar
-
 # Definir o comando para iniciar a aplicação
 CMD ["java", "-jar", "/app/com.liralabs.paris-all.jar"]
