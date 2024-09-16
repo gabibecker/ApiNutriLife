@@ -13,7 +13,6 @@ RUN chmod +x ./gradlew
 # Executar o build do Gradle
 RUN ./gradlew build
 
-
 # Etapa final: usar uma imagem mais leve do OpenJDK apenas para executar a aplicação
 FROM openjdk:11-jre-slim as run
 
