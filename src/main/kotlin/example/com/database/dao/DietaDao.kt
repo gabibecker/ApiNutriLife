@@ -32,6 +32,6 @@ class DietaDao {
     }
 
     suspend fun deleteUserDieta(idUser: Int): Boolean = dbQuery {
-        Dietas.deleteWhere { Dietas.idUser eq idUser+3000 } > 0
+        Dietas.deleteWhere { Dietas.idUser eq idUser} > 0
     }
 }
